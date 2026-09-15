@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  body {
+    background-color: #171315;
+    color: #FAF7F1;
+    font-family: var(--font-montserrat), sans-serif;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: #C9A46A;
+    color: #3A0714;
+  }
+}
+
+@layer utilities {
+  .font-cinzel {
+    font-family: var(--font-cinzel), serif;
+  }
+
+  .font-serif {
+    font-family: var(--font-cormorant), Georgia, serif;
+  }
+
+  .font-sans {
+    font-family: var(--font-montserrat), sans-serif;
+  }
+
+  .gold-gradient-text {
+    background: linear-gradient(135deg, #DFC397 0%, #C9A46A 50%, #9A7844 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .glass-nav {
+    background: rgba(31, 4, 11, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .floor-plan-grid {
+    background-image: radial-gradient(rgba(201, 164, 106, 0.2) 1px, transparent 0);
+    background-size: 24px 24px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(58, 7, 20, 0.05);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #C9A46A;
+    border-radius: 9999px;
+  }
+
+  @keyframes galleryMarquee {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    100% {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  .animate-gallery-marquee {
+    display: flex;
+    width: max-content;
+    animation: galleryMarquee 48s linear infinite;
+    will-change: transform;
+  }
+
+  @keyframes textShimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .animate-text-shimmer {
+    background: linear-gradient(
+      90deg,
+      #C9A46A 0%,
+      #E5D3B3 25%,
+      #FFFFFF 50%,
+      #E5D3B3 75%,
+      #C9A46A 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textShimmer 3.5s linear infinite;
+    display: inline-block;
+  }
+}
