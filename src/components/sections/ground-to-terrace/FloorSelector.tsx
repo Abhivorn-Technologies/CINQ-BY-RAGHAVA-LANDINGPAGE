@@ -20,13 +20,13 @@ export function FloorSelector({
       {/* =========================================================================
           DESKTOP VERTICAL SELECTOR (Right side, stretches 100% to match Left height)
           ========================================================================= */}
-      <div className="hidden lg:flex flex-col justify-between h-full w-full bg-[#23040C] text-stone-100 rounded-2xl p-3 sm:p-3.5 xl:p-4 border border-brand-gold/35 shadow-xl relative overflow-hidden backdrop-blur-md">
+      <div className="hidden lg:flex flex-col justify-between h-full w-full bg-[#23040C] text-stone-100 rounded-2xl p-3.5 xl:p-4 border border-brand-gold/35 shadow-xl relative overflow-hidden backdrop-blur-md">
         {/* Subtle architectural luxury glow */}
         <div className="absolute top-0 right-0 w-40 h-40 bg-brand-gold/8 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-40 h-40 bg-brand-wineLight/25 rounded-full blur-3xl pointer-events-none" />
 
         {/* Panel Header */}
-        <div className="pb-2 mb-1 border-b border-brand-gold/20 relative z-10 shrink-0">
+        <div className="pb-2.5 mb-1.5 border-b border-brand-gold/20 relative z-10 shrink-0">
           <div className="flex items-center space-x-1.5 text-brand-gold mb-0.5">
             <Sparkles className="w-3 h-3 text-brand-gold" />
             <span className="text-[9.5px] uppercase tracking-super-wide font-semibold">
@@ -45,7 +45,7 @@ export function FloorSelector({
         <div
           role="tablist"
           aria-label="CINQ Floor Selector"
-          className="flex-1 flex flex-col justify-between space-y-1 relative z-10 my-0.5"
+          className="flex-1 flex flex-col gap-1.5 xl:gap-2 relative z-10 my-1 min-h-0"
         >
           {floors.map((floor) => {
             const isActive = floor.id === activeFloorId;
@@ -59,7 +59,7 @@ export function FloorSelector({
                 aria-controls={`panel-${floor.id}`}
                 aria-label={`Select ${floor.title}: ${floor.shortAmenities.join(", ")}`}
                 onClick={() => onSelectFloor(floor.id)}
-                className={`w-full text-left rounded-xl p-1.5 xl:p-2 transition-all duration-300 relative group flex items-center justify-between border cursor-pointer ${
+                className={`w-full flex-1 min-h-[44px] xl:min-h-[48px] text-left rounded-xl px-2.5 py-1.5 xl:px-3 xl:py-2 transition-all duration-300 relative group flex items-center justify-between border cursor-pointer ${
                   isActive
                     ? "bg-gradient-to-r from-brand-wine to-[#500B1D] text-white border-brand-gold shadow-[0_2px_12px_-2px_rgba(201,164,106,0.4)] translate-x-1"
                     : "bg-[#1B0208]/75 hover:bg-[#320612]/90 text-stone-300 border-white/5 hover:border-brand-gold/40 hover:text-white"
@@ -121,7 +121,7 @@ export function FloorSelector({
         </div>
 
         {/* Bottom Elevation Note */}
-        <div className="pt-1.5 mt-1 border-t border-brand-gold/15 flex items-center justify-between text-[10px] text-stone-400 font-light tracking-wide relative z-10 shrink-0">
+        <div className="pt-2 mt-1 border-t border-brand-gold/15 flex items-center justify-between text-[10px] text-stone-400 font-light tracking-wide relative z-10 shrink-0">
           <div className="flex items-center space-x-1">
             <Building2 className="w-3 h-3 text-brand-gold" />
             <span>Vertical Scale</span>
@@ -135,7 +135,7 @@ export function FloorSelector({
       {/* =========================================================================
           MOBILE / TABLET HORIZONTAL SELECTOR (< lg)
           ========================================================================= */}
-      <div className="lg:hidden w-full mb-6">
+      <div className="lg:hidden w-full">
         <div className="bg-[#23040C] p-3 sm:p-3.5 rounded-2xl border border-brand-gold/30 shadow-lg">
           <div className="flex items-center justify-between mb-2.5 px-1">
             <span className="text-[10px] uppercase tracking-super-wide text-brand-gold font-semibold">

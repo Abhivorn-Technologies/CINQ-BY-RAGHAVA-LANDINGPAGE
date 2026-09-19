@@ -1,3 +1,5 @@
+"use client";
+
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
@@ -13,30 +15,32 @@ import { Location } from "@/components/sections/Location";
 import { Contact } from "@/components/sections/Contact";
 import { Specifications } from "@/components/sections/Specifications";
 import { ContactPopup } from "@/components/ui/ContactPopup";
+import { EnquiryModalProvider } from "@/context/EnquiryModalContext";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#171315]">
-      <Navbar />
+    <EnquiryModalProvider>
+      <div className="flex flex-col min-h-screen bg-[#171315]">
+        <Navbar />
 
-      <main className="flex-grow">
-        <Hero />
-        <ProjectStats />
-        <ProjectIntro />
-        <Highlights />
-        <Clubhouse />
-        <GroundToTerrace />
-        <ProjectGallery />
-        <Residences />
-        <Amenities />
-        <Location />
-        <Specifications />
-        <Contact />
-      </main>
+        <main className="flex-grow">
+          <Hero />
+          <ProjectStats />
+          <ProjectIntro />
+          <Highlights />
+          <Clubhouse />
+          <GroundToTerrace />
+          <ProjectGallery />
+          <Residences />
+          <Amenities />
+          <Location />
+          <Specifications />
+          <Contact />
+        </main>
 
-      <Footer />
-      <ContactPopup />
-    </div>
+        <Footer />
+        <ContactPopup />
+      </div>
+    </EnquiryModalProvider>
   );
 }
-

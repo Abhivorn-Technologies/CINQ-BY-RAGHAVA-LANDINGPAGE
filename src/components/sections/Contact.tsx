@@ -106,23 +106,6 @@ export function Contact() {
 
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-xl bg-brand-gold/10 border border-brand-gold/30 flex items-center justify-center text-brand-gold shrink-0 mt-0.5">
-                    <Mail className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <span className="text-[11px] uppercase tracking-wider text-stone-400 block font-medium">
-                      Email Consultations
-                    </span>
-                    <a
-                      href={`mailto:${PROJECT_INFO.contact.email}`}
-                      className="text-sm sm:text-base text-white hover:text-brand-gold font-medium transition-colors break-all"
-                    >
-                      {PROJECT_INFO.contact.email}
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-brand-gold/10 border border-brand-gold/30 flex items-center justify-center text-brand-gold shrink-0 mt-0.5">
                     <MapPin className="w-4 h-4" />
                   </div>
                   <div>

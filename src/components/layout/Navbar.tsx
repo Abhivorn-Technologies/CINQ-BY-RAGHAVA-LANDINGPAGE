@@ -7,11 +7,13 @@ import { Menu } from "lucide-react";
 import { NAV_ITEMS } from "@/data/project";
 import { MobileMenu } from "./MobileMenu";
 import { cn } from "@/lib/utils";
+import { useEnquiry } from "@/context/EnquiryModalContext";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("hero");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { openEnquiry } = useEnquiry();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -100,28 +102,30 @@ export function Navbar() {
 
           {/* Right Header CTAs - PRICING + REQUEST A CALL with Equal Height & Clean Spacing */}
           <div className="flex items-center gap-3.5 lg:gap-4 flex-shrink-0 ml-3 lg:ml-6">
-            {/* PRICING Button */}
-            <a
-              href="#contact"
-              className="hidden lg:inline-flex items-center justify-center h-[44px] px-6 border border-brand-gold/60 text-stone-200 hover:text-brand-gold hover:border-brand-gold text-[11px] uppercase tracking-widest font-medium rounded-full transition-all duration-300 shadow-xs whitespace-nowrap hover:bg-white/5 select-none"
+            {/* PRICING Button -> Opens Pricing Enquiry Popup */}
+            <button
+              type="button"
+              onClick={() => openEnquiry("pricing")}
+              className="hidden lg:inline-flex items-center justify-center h-[44px] px-6 border border-brand-gold/60 text-stone-200 hover:text-brand-gold hover:border-brand-gold text-[11px] uppercase tracking-widest font-medium rounded-full transition-all duration-300 shadow-xs whitespace-nowrap hover:bg-white/5 select-none cursor-pointer"
             >
               Pricing
-            </a>
+            </button>
 
-            {/* REQUEST A CALL Button */}
-            <a
-              href="#contact"
-              className="hidden sm:inline-flex items-center justify-center h-[44px] px-6 bg-brand-gold hover:bg-brand-goldLight text-brand-wine text-[11px] uppercase tracking-widest font-semibold rounded-full transition-all duration-300 shadow-sm whitespace-nowrap hover:shadow-gold-glow select-none"
+            {/* REQUEST A CALL Button -> Opens General Contact Popup */}
+            <button
+              type="button"
+              onClick={() => openEnquiry("general")}
+              className="hidden sm:inline-flex items-center justify-center h-[44px] px-6 bg-brand-gold hover:bg-brand-goldLight text-brand-wine text-[11px] uppercase tracking-widest font-semibold rounded-full transition-all duration-300 shadow-sm whitespace-nowrap hover:shadow-gold-glow select-none cursor-pointer"
             >
               Request a Call
-            </a>
+            </button>
 
             {/* Hamburger Button */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open mobile navigation menu"
-              className="xl:hidden w-10 h-10 rounded-full border border-white/20 hover:border-brand-gold flex items-center justify-center text-white hover:text-brand-gold transition-colors shrink-0"
+              className="xl:hidden w-10 h-10 rounded-full border border-white/20 hover:border-brand-gold flex items-center justify-center text-white hover:text-brand-gold transition-colors shrink-0 cursor-pointer"
             >
               <Menu className="w-5 h-5" />
             </button>
@@ -137,4 +141,3 @@ export function Navbar() {
     </>
   );
 }
-

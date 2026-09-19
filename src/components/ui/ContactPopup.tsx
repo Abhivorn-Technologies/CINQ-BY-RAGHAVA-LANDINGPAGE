@@ -2,14 +2,23 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { X, CheckCircle2, Send, Sparkles, Phone, User, Mail, MessageSquare } from "lucide-react";
+import {
+  X,
+  CheckCircle2,
+  Send,
+  Sparkles,
+  Phone,
+  User,
+  Mail,
+  MessageSquare,
+  FileText,
+  Tag,
+} from "lucide-react";
 import { openWhatsAppEnquiry } from "@/lib/whatsapp";
-
-const POPUP_STORAGE_KEY = "cinq_contact_popup_dismissed";
-const POPUP_DELAY_MS = 30000; // 30 seconds
+import { useEnquiry } from "@/context/EnquiryModalContext";
 
 export function ContactPopup() {
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, enquiryType, closeEnquiry } = useEnquiry();
   const [submitted, setSubmitted] = useState(false);
   const [consent, setConsent] = useState(true);
   const [formData, setFormData] = useState({
@@ -18,36 +27,27 @@ export function ContactPopup() {
     email: "",
     message: "",
   });
-  const [errors, setErrors] = useState<{ name?: string; phone?: string; email?: string }>({});
+  const [errors, setErrors] = useState<{
+    name?: string;
+    phone?: string;
+    email?: string;
+  }>({});
 
   const shouldReduceMotion = useReducedMotion();
 
-  // Trigger popup after 30 seconds once per browsing session
+  // Reset submitted state whenever modal opens or enquiryType changes
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const hasBeenShown = sessionStorage.getItem(POPUP_STORAGE_KEY);
-    if (hasBeenShown) return;
-
-    const timer = setTimeout(() => {
-      const alreadyShown = sessionStorage.getItem(POPUP_STORAGE_KEY);
-      if (!alreadyShown) {
-        setIsOpen(true);
-        sessionStorage.setItem(POPUP_STORAGE_KEY, "true");
-      }
-    }, POPUP_DELAY_MS);
-
-    return () => clearTimeout(timer);
-  }, []);
+    if (isOpen) {
+      setSubmitted(false);
+      setErrors({});
+    }
+  }, [isOpen, enquiryType]);
 
   const handleClose = useCallback(() => {
-    setIsOpen(false);
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem(POPUP_STORAGE_KEY, "true");
-    }
-  }, []);
+    closeEnquiry();
+  }, [closeEnquiry]);
 
-  // Keyboard navigation & body scroll lock
+  // Keyboard navigation (ESC key) & body scroll lock
   useEffect(() => {
     if (!isOpen) return;
 
@@ -79,7 +79,10 @@ export function ContactPopup() {
       newErrors.phone = "Please enter a valid phone number";
     }
 
-    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+    if (
+      formData.email.trim() &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())
+    ) {
       newErrors.email = "Please enter a valid email address";
     }
 
@@ -91,16 +94,71 @@ export function ContactPopup() {
     e.preventDefault();
     if (!validate()) return;
 
-    // Send pre-filled enquiry to WhatsApp
+    // Send pre-filled enquiry to WhatsApp with dynamic intent
     openWhatsAppEnquiry({
+      type: enquiryType,
       name: formData.name,
       phone: formData.phone,
       email: formData.email,
-      message: formData.message || "Contact Popup Enquiry",
+      message:
+        formData.message ||
+        (enquiryType === "brochure"
+          ? "Brochure Request"
+          : enquiryType === "pricing"
+          ? "Pricing Details Enquiry"
+          : "General Project Enquiry"),
     });
 
     setSubmitted(true);
   };
+
+  // Content configurations based on enquiryType
+  const getModalConfig = () => {
+    switch (enquiryType) {
+      case "brochure":
+        return {
+          badge: "BROCHURE REQUEST",
+          badgeIcon: <FileText className="w-3 h-3 text-brand-gold" />,
+          heading: "DOWNLOAD BROCHURE",
+          subheading: "Please fill in your details to receive the CINQ by Raghava brochure.",
+          ctaText: "GET BROCHURE",
+          placeholderMessage: "Specify any preferred unit or tower for brochure...",
+          successTitle: "THANK YOU!",
+          successMessage: "Thank you for contacting the CINQ by Raghava team.",
+          successSubtext: "Our team will get back to you soon.",
+          brochureNote: "Our team will share the brochure with you shortly.",
+        };
+      case "pricing":
+        return {
+          badge: "PRICING DETAILS",
+          badgeIcon: <Tag className="w-3 h-3 text-brand-gold" />,
+          heading: "GET PRICING DETAILS",
+          subheading: "Please fill in your details to receive the latest pricing information for CINQ by Raghava.",
+          ctaText: "GET PRICING",
+          placeholderMessage: "Mention your preferred unit size (e.g. 4BHK 3600 sq.ft.)...",
+          successTitle: "THANK YOU!",
+          successMessage: "Thank you for your enquiry.",
+          successSubtext: "Our team will get back to you soon with the pricing details.",
+          brochureNote: null,
+        };
+      case "general":
+      default:
+        return {
+          badge: "GET IN TOUCH",
+          badgeIcon: <Sparkles className="w-3 h-3 text-brand-gold" />,
+          heading: "Your New Beginning Starts Here.",
+          subheading: "Schedule a visit or speak with our team.",
+          ctaText: "SUBMIT NOW",
+          placeholderMessage: "Share your preferred unit or query...",
+          successTitle: "THANK YOU!",
+          successMessage: "Thank you for contacting the CINQ by Raghava team.",
+          successSubtext: "Our team will get back to you soon.",
+          brochureNote: null,
+        };
+    }
+  };
+
+  const config = getModalConfig();
 
   return (
     <AnimatePresence>
@@ -130,7 +188,7 @@ export function ContactPopup() {
             }
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-lg bg-[#23040C] text-[#FAF7F1] rounded-2xl sm:rounded-3xl border border-brand-gold/40 p-6 sm:p-8 shadow-2xl overflow-hidden"
+            className="relative w-full max-w-lg bg-[#23040C] text-[#FAF7F1] rounded-2xl sm:rounded-3xl border border-brand-gold/40 p-6 sm:p-8 shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto"
           >
             {/* Ambient luxury glows */}
             <div className="absolute top-0 right-0 w-48 h-48 bg-brand-gold/10 rounded-full blur-3xl pointer-events-none" />
@@ -140,7 +198,7 @@ export function ContactPopup() {
             <button
               type="button"
               onClick={handleClose}
-              aria-label="Close contact form"
+              aria-label="Close enquiry popup"
               className="absolute top-4 right-4 sm:top-5 sm:right-5 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-stone-300 hover:text-white flex items-center justify-center border border-white/15 transition-all duration-200 cursor-pointer z-20 hover:scale-105"
             >
               <X className="w-4 h-4" />
@@ -151,12 +209,26 @@ export function ContactPopup() {
                 <div className="w-14 h-14 rounded-full bg-brand-gold/15 text-brand-gold flex items-center justify-center mx-auto border border-brand-gold/40">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <h3 className="font-serif text-2xl sm:text-3xl text-white font-light">
-                  THANK YOU!
+                <h3 className="font-serif text-2xl sm:text-3xl text-white font-light tracking-wide">
+                  {config.successTitle}
                 </h3>
-                <p className="text-stone-300 text-xs sm:text-sm font-light leading-relaxed max-w-sm mx-auto">
-                  Thank you for contacting the CINQ by Raghava team. We have received your enquiry and our team will get back to you soon.
-                </p>
+                <div className="space-y-1.5">
+                  <p className="text-stone-200 text-xs sm:text-sm font-light leading-relaxed max-w-sm mx-auto">
+                    {config.successMessage}
+                  </p>
+                  <p className="text-stone-400 text-xs sm:text-sm font-light leading-relaxed max-w-sm mx-auto">
+                    {config.successSubtext}
+                  </p>
+                </div>
+
+                {config.brochureNote && (
+                  <div className="pt-2 pb-1">
+                    <p className="text-brand-gold text-xs sm:text-[13px] font-medium max-w-xs mx-auto px-3 py-2 rounded-lg bg-brand-gold/10 border border-brand-gold/30">
+                      {config.brochureNote}
+                    </p>
+                  </div>
+                )}
+
                 <div className="pt-3">
                   <button
                     type="button"
@@ -172,17 +244,17 @@ export function ContactPopup() {
                 {/* Header */}
                 <div className="mb-5 pr-8">
                   <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-white/10 border border-brand-gold/30 text-brand-gold text-[10px] uppercase tracking-super-wide font-semibold mb-2">
-                    <Sparkles className="w-3 h-3 text-brand-gold" />
-                    <span>GET IN TOUCH</span>
+                    {config.badgeIcon}
+                    <span>{config.badge}</span>
                   </div>
                   <h3
                     id="popup-heading"
                     className="font-serif text-2xl sm:text-3xl text-white font-light leading-snug"
                   >
-                    Your New Beginning Starts Here.
+                    {config.heading}
                   </h3>
                   <p className="text-stone-300 text-xs font-light mt-1">
-                    Schedule a visit or speak with our team.
+                    {config.subheading}
                   </p>
                 </div>
 
@@ -200,7 +272,8 @@ export function ContactPopup() {
                         value={formData.name}
                         onChange={(e) => {
                           setFormData({ ...formData, name: e.target.value });
-                          if (errors.name) setErrors({ ...errors, name: undefined });
+                          if (errors.name)
+                            setErrors({ ...errors, name: undefined });
                         }}
                         className={`w-full bg-[#1A0208] border ${
                           errors.name ? "border-red-400" : "border-white/15"
@@ -228,7 +301,8 @@ export function ContactPopup() {
                           value={formData.phone}
                           onChange={(e) => {
                             setFormData({ ...formData, phone: e.target.value });
-                            if (errors.phone) setErrors({ ...errors, phone: undefined });
+                            if (errors.phone)
+                              setErrors({ ...errors, phone: undefined });
                           }}
                           className={`w-full bg-[#1A0208] border ${
                             errors.phone ? "border-red-400" : "border-white/15"
@@ -254,7 +328,8 @@ export function ContactPopup() {
                           value={formData.email}
                           onChange={(e) => {
                             setFormData({ ...formData, email: e.target.value });
-                            if (errors.email) setErrors({ ...errors, email: undefined });
+                            if (errors.email)
+                              setErrors({ ...errors, email: undefined });
                           }}
                           className={`w-full bg-[#1A0208] border ${
                             errors.email ? "border-red-400" : "border-white/15"
@@ -278,7 +353,7 @@ export function ContactPopup() {
                     <div className="relative">
                       <input
                         type="text"
-                        placeholder="Share your preferred unit or enquiry..."
+                        placeholder={config.placeholderMessage}
                         value={formData.message}
                         onChange={(e) =>
                           setFormData({ ...formData, message: e.target.value })
@@ -313,7 +388,7 @@ export function ContactPopup() {
                       disabled={!consent}
                       className="w-full py-3 bg-brand-gold hover:bg-brand-goldLight disabled:opacity-50 text-brand-wine font-semibold text-xs tracking-widest uppercase rounded-lg shadow-lg hover:shadow-gold-glow transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
                     >
-                      <span>SUBMIT NOW</span>
+                      <span>{config.ctaText}</span>
                       <Send className="w-3.5 h-3.5" />
                     </button>
                   </div>

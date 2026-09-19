@@ -6,10 +6,12 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { BedDouble, X, ZoomIn, Compass, ArrowRight } from "lucide-react";
+import { useEnquiry } from "@/context/EnquiryModalContext";
 
 export function Residences() {
   const [modalOpen, setModalOpen] = useState(false);
   const shouldReduceMotion = useReducedMotion();
+  const { openEnquiry } = useEnquiry();
 
   return (
     <section
@@ -54,18 +56,20 @@ export function Residences() {
             <Reveal delay={0.35}>
               <div className="pt-2 flex flex-wrap items-center gap-3.5">
                 <button
+                  type="button"
                   onClick={() => setModalOpen(true)}
-                  className="inline-flex items-center justify-center gap-2 h-[44px] px-7 text-[11px] lg:text-xs font-semibold uppercase tracking-widest bg-brand-gold hover:bg-brand-goldLight text-brand-wine rounded-full shadow-md hover:shadow-gold-glow transition-all duration-300"
+                  className="inline-flex items-center justify-center gap-2 h-[44px] px-7 text-[11px] lg:text-xs font-semibold uppercase tracking-widest bg-brand-gold hover:bg-brand-goldLight text-brand-wine rounded-full shadow-md hover:shadow-gold-glow transition-all duration-300 cursor-pointer"
                 >
                   <span>View Floor Plan</span>
                   <ZoomIn className="w-3.5 h-3.5" />
                 </button>
-                <a
-                  href="#contact"
-                  className="inline-flex items-center justify-center h-[44px] px-7 text-[11px] lg:text-xs font-medium uppercase tracking-widest bg-transparent hover:bg-brand-cream/60 text-brand-wine border border-brand-wine/40 hover:border-brand-wine rounded-full transition-all duration-300"
+                <button
+                  type="button"
+                  onClick={() => openEnquiry("general")}
+                  className="inline-flex items-center justify-center h-[44px] px-7 text-[11px] lg:text-xs font-medium uppercase tracking-widest bg-transparent hover:bg-brand-cream/60 text-brand-wine border border-brand-wine/40 hover:border-brand-wine rounded-full transition-all duration-300 cursor-pointer"
                 >
                   Request a Call
-                </a>
+                </button>
               </div>
             </Reveal>
           </div>
@@ -170,6 +174,7 @@ export function Residences() {
                   </p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setModalOpen(false)}
                   className="w-9 h-9 rounded-full bg-brand-cream hover:bg-brand-wine hover:text-white border border-brand-creamBorder flex items-center justify-center text-brand-wine transition-colors cursor-pointer"
                 >
@@ -193,14 +198,17 @@ export function Residences() {
                 <span className="text-xs text-stone-600">
                   Custom bespoke finishes and floor adaptations available upon request.
                 </span>
-                <a
-                  href="#contact"
-                  onClick={() => setModalOpen(false)}
-                  className="px-8 py-3 bg-brand-wine hover:bg-brand-wineDark text-brand-gold font-semibold text-xs uppercase tracking-widest rounded-full transition-all flex items-center gap-2"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setModalOpen(false);
+                    openEnquiry("brochure");
+                  }}
+                  className="px-8 py-3 bg-brand-wine hover:bg-brand-wineDark text-brand-gold font-semibold text-xs uppercase tracking-widest rounded-full transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <span>Request Full Floor Plan PDF</span>
                   <ArrowRight className="w-4 h-4" />
-                </a>
+                </button>
               </div>
             </motion.div>
           </div>
@@ -209,4 +217,3 @@ export function Residences() {
     </section>
   );
 }
-

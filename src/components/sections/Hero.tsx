@@ -3,9 +3,11 @@
 import React from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
+import { useEnquiry } from "@/context/EnquiryModalContext";
 
 export function Hero() {
   const shouldReduceMotion = useReducedMotion();
+  const { openEnquiry } = useEnquiry();
 
   return (
     <section
@@ -108,22 +110,23 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.55, ease: "easeOut" }}
             className="pt-2 flex flex-wrap items-center gap-3.5"
           >
-            <a
-              href="#contact"
-              className="inline-flex items-center justify-center h-[44px] px-7 sm:px-8 text-[11px] lg:text-xs font-semibold uppercase tracking-widest bg-brand-gold hover:bg-brand-goldLight text-brand-wine rounded-full shadow-lg hover:shadow-gold-glow transition-all duration-300 whitespace-nowrap"
+            <button
+              type="button"
+              onClick={() => openEnquiry("brochure")}
+              className="inline-flex items-center justify-center h-[44px] px-7 sm:px-8 text-[11px] lg:text-xs font-semibold uppercase tracking-widest bg-brand-gold hover:bg-brand-goldLight text-brand-wine rounded-full shadow-lg hover:shadow-gold-glow transition-all duration-300 whitespace-nowrap cursor-pointer"
             >
               Download Brochure
-            </a>
-            <a
-              href="#contact"
-              className="inline-flex items-center justify-center h-[44px] px-7 sm:px-8 text-[11px] lg:text-xs font-medium uppercase tracking-widest bg-transparent hover:bg-white/10 text-brand-cream border border-brand-gold/80 hover:border-brand-gold rounded-full transition-all duration-300 whitespace-nowrap"
+            </button>
+            <button
+              type="button"
+              onClick={() => openEnquiry("general")}
+              className="inline-flex items-center justify-center h-[44px] px-7 sm:px-8 text-[11px] lg:text-xs font-medium uppercase tracking-widest bg-transparent hover:bg-white/10 text-brand-cream border border-brand-gold/80 hover:border-brand-gold rounded-full transition-all duration-300 whitespace-nowrap cursor-pointer"
             >
               Request a Call
-            </a>
+            </button>
           </motion.div>
         </div>
       </div>
     </section>
   );
 }
-

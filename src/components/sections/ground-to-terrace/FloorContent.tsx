@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { GroundToTerraceFloor } from "@/data/groundToTerrace";
-import { Sparkles, Layers, CheckCircle2 } from "lucide-react";
+import { Layers, CheckCircle2 } from "lucide-react";
 
 interface FloorContentProps {
   floor: GroundToTerraceFloor;
@@ -24,28 +24,6 @@ export function FloorContent({ floor }: FloorContentProps) {
   return (
     <div className="w-full flex flex-col justify-between h-full">
       {/* =========================================================================
-          TOP SECTION HEADER (Aligned with Left Content Column)
-          ========================================================================= */}
-      <div className="mb-3 lg:mb-3.5">
-        <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-brand-wine/5 border border-brand-wine/15 text-brand-wine text-[10.5px] uppercase tracking-super-wide font-semibold mb-1">
-          <Sparkles className="w-3 h-3 text-brand-goldDim" />
-          <span>GROUND TO TERRACE</span>
-        </div>
-
-        <h2 className="font-serif text-2xl sm:text-3xl lg:text-[32px] xl:text-[36px] text-brand-wine font-light tracking-tight leading-tight">
-          A Lifestyle{" "}
-          <span className="font-normal italic font-serif text-brand-goldDim">
-            At Every Level
-          </span>
-        </h2>
-
-        <p className="text-stone-700 text-xs sm:text-[13px] font-light max-w-2xl mt-1 leading-relaxed tracking-wide">
-          From grand welcomes to elevated leisure, CINQ offers a thoughtfully
-          curated experience across every floor.
-        </p>
-      </div>
-
-      {/* =========================================================================
           DYNAMIC FLOOR CONTENT (Smooth Vertical Slide-Up Animation)
           ========================================================================= */}
       <div className="relative w-full flex-grow flex flex-col justify-between">
@@ -55,18 +33,18 @@ export function FloorContent({ floor }: FloorContentProps) {
             id={`panel-${floor.id}`}
             role="tabpanel"
             aria-labelledby={`tab-${floor.id}`}
-            initial={{ opacity: 0, y: 25, filter: "blur(3px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            exit={{ opacity: 0, y: -20, filter: "blur(3px)" }}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
             transition={{
-              duration: 0.5,
+              duration: 0.35,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="w-full flex flex-col space-y-2.5 sm:space-y-3"
+            className="w-full flex flex-col space-y-3 sm:space-y-3.5"
           >
             {/* 1. LARGE MAIN FLOOR IMAGE (Full Width of Left Column) */}
             <div className="relative w-full rounded-xl sm:rounded-2xl overflow-hidden bg-stone-900 border border-brand-creamBorder shadow-lg group">
-              <div className="relative h-[250px] sm:h-[280px] lg:h-[310px] xl:h-[330px] w-full overflow-hidden">
+              <div className="relative h-[260px] sm:h-[290px] lg:h-[320px] xl:h-[340px] w-full overflow-hidden">
                 <Image
                   src={activeImage}
                   alt={activeImageAlt}
@@ -81,7 +59,7 @@ export function FloorContent({ floor }: FloorContentProps) {
                 <div className="absolute inset-0 bg-gradient-to-r from-[#160206]/60 via-transparent to-transparent hidden sm:block" />
 
                 {/* Top Floor Badge */}
-                <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-10 flex items-center space-x-2">
+                <div className="absolute top-3 left-3 z-10 flex items-center space-x-2">
                   <div className="bg-brand-wine/90 backdrop-blur-md text-brand-gold border border-brand-gold/40 px-2.5 py-0.5 rounded-full font-serif text-[11px] sm:text-xs font-semibold tracking-wider flex items-center space-x-1.5 shadow-md">
                     <Layers className="w-3 h-3 text-brand-gold" />
                     <span>
@@ -96,7 +74,7 @@ export function FloorContent({ floor }: FloorContentProps) {
                 </div>
 
                 {/* Bottom Overlay Content on Hero Card */}
-                <div className="absolute bottom-2.5 left-2.5 right-2.5 sm:bottom-3 sm:left-3 sm:right-3 z-10 text-white">
+                <div className="absolute bottom-3 left-3 right-3 sm:bottom-3.5 sm:left-3.5 sm:right-3.5 z-10 text-white">
                   <span className="text-[9.5px] sm:text-[10px] uppercase tracking-super-wide text-brand-gold font-semibold block mb-0.5">
                     {floor.tagline}
                   </span>
@@ -112,7 +90,7 @@ export function FloorContent({ floor }: FloorContentProps) {
             </div>
 
             {/* 2. FLOOR OVERVIEW BOX (Full Width, Compact Layout) */}
-            <div className="w-full bg-white/95 backdrop-blur-md rounded-xl sm:rounded-2xl p-2.5 sm:p-3 lg:p-3.5 border border-brand-creamBorder shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+            <div className="w-full bg-white/95 backdrop-blur-md rounded-xl sm:rounded-2xl p-3 sm:p-3.5 lg:p-4 border border-brand-creamBorder shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
               <div className="max-w-xl xl:max-w-2xl">
                 <h4 className="text-[10px] uppercase tracking-widest text-brand-goldDim font-bold mb-0.5">
                   FLOOR OVERVIEW
@@ -127,7 +105,7 @@ export function FloorContent({ floor }: FloorContentProps) {
                 {floor.shortAmenities.map((amenity) => (
                   <span
                     key={amenity}
-                    className="inline-flex items-center space-x-1 bg-[#FAF7F1] text-brand-wine border border-brand-creamBorder text-[10.5px] sm:text-[11px] font-medium px-2 py-0.5 rounded-full shadow-2xs"
+                    className="inline-flex items-center space-x-1 bg-[#FAF7F1] text-brand-wine border border-brand-creamBorder text-[10.5px] sm:text-[11px] font-medium px-2.5 py-0.5 rounded-full shadow-2xs"
                   >
                     <CheckCircle2 className="w-2.5 h-2.5 text-brand-goldDim shrink-0" />
                     <span>{amenity}</span>

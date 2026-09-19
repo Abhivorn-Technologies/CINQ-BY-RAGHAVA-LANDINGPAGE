@@ -19,7 +19,6 @@ export const PROJECT_INFO = {
   contact: {
     phonePrimary: "+91 62812 45149",
     phoneSecondary: "+91 62812 45149",
-    email: "ravindra@hyderabadpropertyconsultants.com",
   },
   rera: {
     number: "P02400007890",

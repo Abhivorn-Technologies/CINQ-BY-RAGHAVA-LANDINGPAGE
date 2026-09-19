@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Phone, MapPin } from "lucide-react";
 import { NAV_ITEMS, PROJECT_INFO } from "@/data/project";
+import { useEnquiry } from "@/context/EnquiryModalContext";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -12,6 +13,8 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+  const { openEnquiry } = useEnquiry();
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -45,7 +48,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               <button
                 onClick={onClose}
                 aria-label="Close navigation menu"
-                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-stone-300 hover:text-brand-gold hover:border-brand-gold transition-colors"
+                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-stone-300 hover:text-brand-gold hover:border-brand-gold transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -70,21 +73,27 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
             {/* Footer / CTAs: PRICING + REQUEST A CALL */}
             <div className="pt-5 border-t border-white/10 space-y-3">
-              <a
-                href="#contact"
-                onClick={onClose}
-                className="w-full block text-center py-2.5 bg-transparent border border-brand-gold/60 hover:bg-white/10 text-brand-gold font-semibold text-xs tracking-widest uppercase rounded-full transition-all"
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  openEnquiry("pricing");
+                }}
+                className="w-full block text-center py-2.5 bg-transparent border border-brand-gold/60 hover:bg-white/10 text-brand-gold font-semibold text-xs tracking-widest uppercase rounded-full transition-all cursor-pointer"
               >
                 Pricing
-              </a>
+              </button>
 
-              <a
-                href="#contact"
-                onClick={onClose}
-                className="w-full block text-center py-3 bg-brand-gold hover:bg-brand-goldLight text-brand-wine font-semibold text-xs tracking-widest uppercase rounded-full shadow-lg transition-all"
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  openEnquiry("general");
+                }}
+                className="w-full block text-center py-3 bg-brand-gold hover:bg-brand-goldLight text-brand-wine font-semibold text-xs tracking-widest uppercase rounded-full shadow-lg transition-all cursor-pointer"
               >
                 Request a Call
-              </a>
+              </button>
 
               <div className="space-y-2 text-xs text-stone-400 font-light pt-2">
                 <div className="flex items-center gap-2">
